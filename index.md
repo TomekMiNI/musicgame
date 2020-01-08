@@ -1,3 +1,11 @@
+<script type="text/javascript">
+  function start(){
+    window.alert("HEJ OLA KLEPACZKA");
+  }
+  window.onload=startFunction;
+  
+</script>
+
 <style>
   #superman
   {
@@ -10,16 +18,16 @@
     width: 20px;
     height: 20px;
   }
-  .sky
+  #sky
   {
     background-image: url('sky.jpg');
-    width: 50%;
-    height: 50%;
+    width: 100%;
+    height: 100%;
   }
 </style>
 
 
-<div class="sky">
+<div id="sky">
   <img src="superman.png" id="superman">
   <img src="meteorite.png" class="meteorite" style="margin-right: 50px;">
 </div>
