@@ -2,11 +2,15 @@
   function start(){
     window.alert("HEJ OLA KLEPACZKA");
   }
-  window.onload=startFunction;
+  window.onload=start;
   
 </script>
 
 <style>
+  md
+  {
+    height: 100%;
+  }
   #superman
   {
     margin-left: 30px;
@@ -21,8 +25,9 @@
   #sky
   {
     background-image: url('sky.jpg');
-    width: 100%;
     height: 100%;
+    background-size: cover;
+    background-attachment: fixed;
   }
 </style>
 
