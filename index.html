@@ -1,0 +1,233 @@
+<style>
+
+    body, html{
+        height:100%;
+    }
+
+    #superman {
+        width:200px;
+        height:100px;
+    }
+
+    #supermanDiv {
+        left: 50px;
+        top:100px;
+        position: absolute;
+        outline:none;
+    }
+
+    #meteorite {
+        width: 300px;
+        height: 200px;
+    }
+
+    #meteoriteDiv{
+        width: 300px;
+        right: -200px;
+        position:absolute;
+    }
+
+    #letter{
+        width: 200px;
+        height: 200px;
+    }
+    #letterDiv{
+        width: 200px;
+        right:-500px;
+        position:absolute;
+    }
+
+    #answersDiv{
+        position:absolute;
+        bottom:10px;
+        left:10px;
+    }
+    #sky {
+        background-image: url('sky.jpg');
+        height: 100%;
+        background-size: cover;
+        background-attachment: fixed;
+        background-repeat:repeat-x;
+    }
+</style>
+<div id="sky">
+        <div id="supermanDiv" tabindex="0">
+            <img src="superman4.png" id="superman" />
+        </div>
+        <div id="meteoriteDiv">
+            <img src="meteorite3.png" id="meteorite" />
+        </div>
+        <div id="letterDiv">
+            <img id="letter"/>
+        </div>
+        <div id="answersDiv">
+            Answers:
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var letters = ["A", "R", "T", "M", "B", "D", "H"];
+        var currentLetter = "T";
+
+        document.onkeydown = function (event) {
+            document.getElementById("supermanDiv").focus();
+            event.preventDefault();
+            switch (event.keyCode) {
+                case 38:
+                    moveUp();
+                    break;
+                case 40:
+                    moveDown();
+            }
+        }
+        var myTimer;
+        function start() {
+            window.alert("HEJ OLA KLEPACZKA");
+
+
+            currentLetter = letters[Math.floor(Math.random() * letters.length)];
+            var img = document.getElementById("letter");
+            img.src = "letter" + currentLetter + ".png";
+
+            myTimer = setInterval(function () {
+                var el = document.getElementById("sky");
+                var currPos = el.style.backgroundPositionX;
+                if (currPos == "") el.style.backgroundPositionX = "-10px"
+                else {
+                    var newPos = (parseInt(currPos.replace(/px/, "")) - 10) + "px";
+                    el.style.backgroundPositionX = newPos;
+                }
+
+                var el2 = document.getElementById("meteoriteDiv");
+                var currPos2 = el2.offsetLeft;
+                if (currPos2 < -300) {
+                    var sky = document.getElementById("sky");
+                    var val = sky.offsetWidth;
+                    currPos2 = val + 300;
+                    var factor = Math.random();
+                    var posY = factor * sky.offsetHeight;
+                    el2.style.left = currPos2 + "px";
+                    el2.style.top = posY + "px";
+                }
+                else {
+                    var newPos = currPos2 - 10;
+                    el2.style.left = newPos + "px";
+                }
+
+                var el3 = document.getElementById("letterDiv");
+                var currPos3 = el3.offsetLeft;
+                if (currPos3 < -300) {
+                    var sky = document.getElementById("sky");
+                    var val = sky.offsetWidth;
+                    currPos3 = val + 300;
+                    var factor = Math.random();
+                    var posY = factor * sky.offsetHeight;
+                    el3.style.left = currPos3 + "px";
+                    el3.style.top = posY + "px";
+
+                    currentLetter = letters[Math.floor(Math.random() * letters.length)];
+                    var img = document.getElementById("letter");
+                    img.style.opacity = 1;
+                    img.src = "letter" + currentLetter + ".png";
+                }
+                else {
+                    var newPos = currPos3 - 10;
+                    el3.style.left = newPos + "px";
+                }
+                checkCollision();
+            }, 20);
+        }
+        function moveDown() {
+            var el = document.getElementById("supermanDiv");
+            var currentTop = el.offsetTop;
+            var updated = currentTop + 10;
+
+            var skyHeight = document.getElementById("sky").offsetHeight;
+            var imgHeight = el.offsetHeight;
+            if (updated < skyHeight - imgHeight)
+                el.style.top = updated + "px";
+        }
+        function moveUp() {
+            var el = document.getElementById("supermanDiv");
+            var currentTop = el.offsetTop;
+            var updated = currentTop - 10;
+            
+            var imgHeight = el.offsetHeight;
+            if (updated > 0)
+                el.style.top = updated + "px";
+        }
+        function checkCollision() {
+            let superdiv = document.getElementById('supermanDiv').getBoundingClientRect();
+            let superdivheight = superdiv.height / 4;
+            let superdivwidth = superdiv.width / 4;
+            let superdivTop = superdiv.top + superdivheight;
+            let superdivLeft = superdiv.left + superdivwidth;
+            let superdivRight = superdiv.right - superdivwidth;
+            let superdivBottom = superdiv.bottom - superdivheight;
+
+            let meteodiv = document.getElementById('meteoriteDiv').getBoundingClientRect();
+            let meteodivwidth = meteodiv.width / 4;
+            let meteodivTop = meteodiv.top;
+            let meteodivLeft = meteodiv.left + meteodivwidth;
+            let meteodivRight = meteodiv.right - meteodivwidth;
+            let meteodivBottom = meteodiv.bottom;
+
+            let letterdiv = document.getElementById('letterDiv').getBoundingClientRect();
+            let letterdivheight = letterdiv.height / 4;
+            let letterdivwidth = letterdiv.width / 4;
+            let letterdivTop = letterdiv.top + letterdivheight;
+            let letterdivLeft = letterdiv.left + letterdivwidth;
+            let letterdivRight = letterdiv.right - letterdivwidth;
+            let letterdivBottom = letterdiv.bottom - letterdivheight;
+
+
+            var verticalMatch = false;
+            if ((meteodivTop > superdivTop && meteodivTop < superdivBottom) || (meteodivBottom > superdivTop && meteodivBottom < superdivBottom)
+                || (meteodivTop < superdivTop && meteodivBottom > superdivBottom)) 
+                verticalMatch = true;
+
+            if (verticalMatch) {
+                var horizontalMatch = false;
+                if ((meteodivRight > superdivLeft && meteodivRight < superdivRight) || (meteodivLeft < superdivRight && meteodivLeft > superdivLeft)
+                    || (meteodivRight > superdivRight && meteodivLeft < superdivLeft))
+                    horizontalMatch = true;
+
+                if (horizontalMatch && verticalMatch) {
+                    var text = document.getElementById("answersDiv").textContent;
+                    window.alert("OLA KLEPACZKA NIE BYŁABY Z CIEBIE DUMNA!!! " + text);
+                    clearInterval(myTimer);
+                    location.reload();
+                }
+            }
+
+            verticalMatch = false;
+            if ((letterdivTop > superdivTop && letterdivTop < superdivBottom) || (letterdivBottom > superdivTop && letterdivBottom < superdivBottom)
+                || (letterdivTop < superdivTop && letterdivBottom > superdivBottom))
+                verticalMatch = true;
+
+            if (verticalMatch) {
+                var horizontalMatch = false;
+                if ((letterdivRight > superdivLeft && letterdivRight < superdivRight) || (letterdivLeft < superdivRight && letterdivLeft > superdivLeft)
+                    || (letterdivRight > superdivRight && letterdivLeft < superdivLeft))
+                    horizontalMatch = true;
+
+                if (horizontalMatch && verticalMatch) {
+                    for (var i = 0; i < letters.length; i++)
+                        if (letters[i] == currentLetter) {
+                            letters.splice(i, 1);
+                            var el = document.getElementById("answersDiv");
+                            el.textContent = el.textContent + currentLetter + " ";
+                            document.getElementById("letter").style.opacity = 0;
+                            if (letters.length == 0) {
+                                window.alert("OLA KLEPACZKA BYŁABY Z CIEBIE BARDZO DUMNA!!! " + el.textContent);
+                                location.reload();
+                            }
+                            break;
+                        }
+                }
+            }
+
+        }
+        window.onload = start;
+
+    </script>
